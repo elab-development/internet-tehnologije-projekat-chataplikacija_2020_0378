@@ -15,4 +15,27 @@ class Message extends Model
         'receiver_id',
         'group_id',
     ];
+
+    public function sender()
+    {
+        return $this->belongsTo(User::class, 'sender_id');//poruka je poslata od strane jednog korisnika
+    }
+
+    public function receiver()
+    {
+        return $this->belongsTo(User::class, 'receiver_id');//poslata poruka pripada jednom primaocu
+    }
+
+    public function group()
+    {
+        return $this->belongsTo(Group::class);//poruka je poslata jednoj i samo jednoj grupi
+    }
+
+
+    public function attachnemts()
+    {
+        return $this->hasMany(MessageAttachment::class);// jedna poruka moze imati vise atachmenta
+    }
+       
+
 }
