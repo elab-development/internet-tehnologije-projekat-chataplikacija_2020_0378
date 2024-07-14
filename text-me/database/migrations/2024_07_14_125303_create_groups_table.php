@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->longText('description')->nullable();
             $table->foreignId('owner_id')->constrained('users')->onDelete('cascade');// spoljni kljuc za users i kada se usre obrise brisu se i njegove grupe
-
             $table->timestamps();
         });
 
@@ -34,7 +33,7 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('groups_users');
+        Schema::dropIfExists('group_users');
         Schema::dropIfExists('groups');
     }
 };

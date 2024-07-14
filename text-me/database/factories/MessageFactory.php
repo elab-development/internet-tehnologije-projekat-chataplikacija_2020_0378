@@ -28,8 +28,8 @@ class MessageFactory extends Factory
         if ($this->faker->boolean(50)) { //ima 50% sanse da bude true
             $groupId = $this->faker->randomElement(\App\Models\Group::pluck('id')->toArray());
             // ako je group id selaktovan onda receiver id mora biti null
-            $groupId = \App\Models\Group::find($groupId);
-            $senderId = $this->faker->randomElement($group->users->pluk('id')->toArray());//sender id mora biti od nekog usera iz grupe
+            $group = \App\Models\Group::find($groupId);
+            $senderId = $this->faker->randomElement($group->users->pluck('id')->toArray());//sender id mora biti od nekog usera iz grupe
             $receiverId = null;
         }
 
@@ -37,7 +37,7 @@ class MessageFactory extends Factory
             'sender_id' => $senderId,
             'receiver_id' => $receiverId,
             'group_id' => $groupId,
-            'message' => $this->faker->realtext(200),
+            'message' => $this->faker->realText(200),
             'created_at' => $this->faker->dateTimeBetween('-1 year', 'now'), //generise poruku koja ce biti datuma izmedju sadasnjeg trenutka i jedna godine pre
         ];
     }
