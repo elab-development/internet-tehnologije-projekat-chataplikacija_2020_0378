@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import ApplicationLogo from '@/Components/ApplicationLogo';
 import Dropdown from '@/Components/Dropdown';
 import NavLink from '@/Components/NavLink';
@@ -9,9 +9,7 @@ export default function Authenticated({ header, children }) {
     const page = usePage();
     const user = page.props.auth.user; //pogledaj handleinertiarequests
     const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
-    useEffect(() => {
-        console.log("AuthanticatedLayout mounted");
-    },[]);
+   
 
     return (
         <div className="min-h-screen bg-gray-100 dark:bg-gray-900">
