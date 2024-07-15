@@ -1,11 +1,21 @@
 
 import ChatLayout from '@/Layouts/ChatLayout';
-import { Head } from '@inertiajs/react';
+import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 
-export default function Home({ auth }) {
+function Home({ auth }) {
     return (
-        <ChatLayout>
- 
-        </ChatLayout>
+        <>Messages</>
     );
 }
+
+//persistent layout
+Home.layout = (page) => {
+    return (
+        <AuthenticatedLayout
+        user={page.props.auth.user}>
+        <ChatLayout children={page}></ChatLayout>
+    </AuthenticatedLayout>
+    )
+}
+
+export default Home;
