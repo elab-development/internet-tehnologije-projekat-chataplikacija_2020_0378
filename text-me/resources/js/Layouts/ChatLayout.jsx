@@ -1,3 +1,7 @@
+
+import ConversationItem from "@/Components/App/ConversationItem";
+import TextInput from "@/Components/TextInput";
+import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
@@ -18,6 +22,20 @@ const ChatLayout = ({children}) => {
 
     console.log("conversations", conversations);
     console.log("selectedConversation", selectedConversation);
+
+    const onSearch = (ev) => {
+        const search = ev.target.value.toLowerCase();
+        //pratimo lokalne konv i updateujemo sortirane dole preko useeffecta
+        //filtriramo konv prema imenu konv ili grupe
+        setLocalConversations(
+            conversations.filter((conversation) => {
+                return (
+                    conversation.name.toLowerCase().includes(search) 
+                    
+                );
+            })
+        );
+    }
 
     useEffect(() => {
         setSortedConversations(
@@ -92,10 +110,55 @@ const ChatLayout = ({children}) => {
 
     }, []);
 
-
+    //Elemeniti ce biti rasporedjeni preko flex-a, maksimalna sirina
+    //Prvi div unutar roditeljskog se odnosi na chatove sa leve strane i responzivnost(male srednej i velike ekrane)
+    //Ternarni za selected conversation se odnosii na mobilni ml je margine left
     return (
         <>
-           
+           <div className ="flex-1 w-full flex  overflow-hidden" >
+
+            <div className={`transition-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-hidden
+                ${selectedConversation ? "-ml-[100%] sm:ml-0" : ""               
+                    }`}
+            >
+
+                    <div className="flex items-center justify-between py-2 px-3 text-xl font-medium">
+                        My Conversations 
+                        <div
+                        className="tooltip tooltip-left"
+                        data-tip="Create new Group"
+                        >
+                            <button 
+                            className="text-gray-400 hover:text-gray-200">
+                                <PencilSquareIcon className="size-6 text-blue-500" />
+                            </button>
+                        </div>
+                    </div>
+            
+                    <div className="p-3">
+                        <TextInput
+                            onKeyUp={onSearch}
+                            placeholder="Filter users and groups"
+                            className="w-full"
+                        />
+                    </div>
+
+                    <div className="flex-1 overflow-auto">
+                        {sortedConversations && sortedConversations.map((conversation) => (
+                          <ConversationItem
+                            key={`${conversation.is_group ? "group_" : "user_"}${conversation.id}`} 
+                            conversation={conversation}
+                            online={!!isUserOnline(conversation.id)}
+                            selectedConversation={selectedConversation}
+                          />  
+                        ) )}
+                    </div>
+            </div>
+            <div className="flex-1 flex flex-col overflow-hidden">
+                {children}
+            </div>
+
+           </div>
         </>
     );
 }

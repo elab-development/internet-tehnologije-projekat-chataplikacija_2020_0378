@@ -1,5 +1,6 @@
 
 const UserAvatar = ({user, online=null, profile=false}) => {
+    
 
     let onlineClass = online === true ? "online" : online === false ? "offline" : "";
 
@@ -8,6 +9,8 @@ const UserAvatar = ({user, online=null, profile=false}) => {
 //ako ima sliku vraca sliku a ako nema prikazuje prvo slovo imena 
     return (
         <>
+        
+
             {user.avatar_url && (
                 <div className={`chat-image avatar ${onlineClass}`}>
                     <div className={`rounded-full ${sizeClass}`}>
