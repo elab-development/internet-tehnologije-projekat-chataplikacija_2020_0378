@@ -31,9 +31,9 @@ class Conversation extends Model
     }
 
     //pokazuje sidebaru sve konv sem njega samog i sve grupe u kojima se nalazi
-    public static function getConversationsForSidebar(User $exceptUser){
-        $users = User::getUsersExceptUser($exceptUser);
-        $groups = Group::getGroupsForUser($exceptUser);
+    public static function getConversationsForSidebar(User $user){
+        $users = User::getUsersExceptUser($user);
+        $groups = Group::getGroupsForUser($user);
         return $users->map(function(User $user) {
             return $user->toConversationArray();
         })->concat($groups->map(function (Group $group) {
