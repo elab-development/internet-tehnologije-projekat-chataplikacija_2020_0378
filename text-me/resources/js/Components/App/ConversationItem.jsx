@@ -12,7 +12,7 @@ const ConversationItem = ({
 ) => {
     const page = usePage();
     const currentUser = page.props.auth.user;
-    let classes = "broder-transparent";
+    let classes = "border-transparent";
     if (selectedConversation) {
         if (!selectedConversation.is_group && !conversation.is_group && selectedConversation == conversation.id) {
             classes = "border-blue-500 bg-black/20";
@@ -39,9 +39,8 @@ const ConversationItem = ({
             )
         }
         >
-            {conversation.is_user && ( 
-                <UserAvatar user={conversation} online={online} /> )}
-                {conversation.is_group && <GroupAvatar />}
+            {conversation.is_user && (<UserAvatar user={conversation} online={online} /> )}
+            {conversation.is_group && <GroupAvatar />}
                 <div 
                     className={`flex-1 text-xs max-w-full overflow-hidden` + 
                     (conversation.is_user && conversation.blocked_at ? " opacity-50" : "")}
@@ -62,7 +61,7 @@ const ConversationItem = ({
                         </p>
                     )}
                 </div>
-                {currentUser.is_admin && conversation.is_user && (
+                {currentUser.is_admin && conversation.is_user || (
                     <UserOptionsDropdown conversation={conversation}/>
                 )}
         </Link>

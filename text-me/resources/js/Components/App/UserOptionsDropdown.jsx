@@ -25,13 +25,13 @@ export default function UserOptionsDropdown({conversation}) {
             return;
         }
         axios
-        .post(route("user.blockUnblock", conversation.id))
-        .then((response) => {
-            console.log(response.data);
-        })
-        .catch((error) => {
-            console.error(error);
-        })
+            .post(route("user.blockUnblock", conversation.id))
+            .then((response) => {
+                console.log(response.data);
+            })
+            .catch((error) => {
+                console.error(error);
+            })
 
     }
 
