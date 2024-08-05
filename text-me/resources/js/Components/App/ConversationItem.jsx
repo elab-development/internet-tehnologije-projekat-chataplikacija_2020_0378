@@ -12,6 +12,10 @@ const ConversationItem = ({
 ) => {
     const page = usePage();
     const currentUser = page.props.auth.user;
+
+    // console.log("Conversation object:", conversation);
+    // console.log("Is user:", conversation.is_user);
+
     let classes = "border-transparent";
     if (selectedConversation) {
         if (!selectedConversation.is_group && !conversation.is_group && selectedConversation == conversation.id) {
@@ -24,7 +28,7 @@ const ConversationItem = ({
     //preserveState sluzi da ne izgleda kao da se otvorila nova strana kada se promeni cet sa nekim drugim 
     return(
         <Link href={
-            conversation.is_group 
+            conversation.is_group
             ? route("chat.group", conversation)
             : route("chat.user", conversation)
         }
@@ -61,7 +65,7 @@ const ConversationItem = ({
                         </p>
                     )}
                 </div>
-                {currentUser.is_admin && conversation.is_user || (
+                {currentUser.is_admin && conversation.is_user && (
                     <UserOptionsDropdown conversation={conversation}/>
                 )}
         </Link>
