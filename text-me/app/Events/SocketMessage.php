@@ -12,7 +12,7 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Queue\SerializesModels;
 use App\Models\Message;
 use App\Http\Resources\MessageResource;
-    
+ 
 class SocketMessage implements ShouldBroadcastNow 
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
@@ -43,9 +43,9 @@ class SocketMessage implements ShouldBroadcastNow
         $channels = [];
 
         if ($m->group_id) {
-            $channels[] = new PrivateChannel('message.group.'. $m->group_id);
+            $channels[] = new PrivateChannel('message.group.' . $m->group_id);
         }else {
-            new PrivateChannel('message.user.'.collect([$m->sender_id, $m->receiver_id])->sort()->implode('-'));
+            new PrivateChannel('message.user.'. collect([$m->sender_id, $m->receiver_id])->sort()->implode('-'));
         }
 
         return $channels;

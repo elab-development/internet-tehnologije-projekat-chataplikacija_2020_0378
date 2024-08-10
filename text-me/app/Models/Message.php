@@ -32,7 +32,7 @@ class Message extends Model
     }
 
 
-    public function attachnemts()
+    public function attachments()
     {
         return $this->hasMany(MessageAttachment::class);// jedna poruka moze imati vise atachmenta
     }

@@ -5,6 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
+
 class MessageResource extends JsonResource
 {
 
@@ -24,7 +25,7 @@ class MessageResource extends JsonResource
             'receiver_id' => $this->receiver_id,
             'sender'=> new UserResource($this->sender),
             'group_id' => $this-> group_id,
-            'atachments' => MessageAttachmentResource::collection($this->attachments),
+            'attachments' => MessageAttachmentResource::collection($this->attachments),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

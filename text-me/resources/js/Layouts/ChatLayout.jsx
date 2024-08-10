@@ -20,9 +20,6 @@ const ChatLayout = ({children}) => {
     const isUserOnline = (userId) => onlineUsers[userId]; //funkcija koja vraca objekat user ako postoji userId u online users
 
 
-    console.log("conversations", conversations);
-    console.log("selectedConversation", selectedConversation);
-
     const onSearch = (ev) => {
         const search = ev.target.value.toLowerCase();
         //pratimo lokalne konv i updateujemo sortirane dole preko useeffecta
@@ -115,7 +112,7 @@ const ChatLayout = ({children}) => {
     //Ternarni za selected conversation se odnosii na mobilni ml je margine left
     return (
         <>
-           <div className ="flex-1 w-full flex  overflow-hidden" >
+           <div className ="flex-1 w-full flex overflow-hidden" >
 
             <div className={`transition-all w-full sm:w-[220px] md:w-[300px] bg-slate-800 flex flex-col overflow-hidden
                 ${selectedConversation ? "-ml-[100%] sm:ml-0" : ""               

@@ -3,6 +3,17 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\User;
+use App\Models\Message;
+use App\Http\Resources\MessageResource;
+use App\Models\Group;
+
+use App\Models\Conversation;
+use App\Http\Requests\StoreMessageRequest;
+use App\Models\MessageAttachment;
+use App\Events\SocketMessage;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {
@@ -17,8 +28,7 @@ class MessageController extends Controller
         ;
 
         return inertia('Home', [
-
-            'selectedConversation' => $user->toConversationAray(),
+            'selectedConversation' => $user->toConversationArray(),
             'messages' => MessageResource::collection($messages),
         ]);
 
@@ -28,11 +38,11 @@ class MessageController extends Controller
 
         $messages = Message::where('group_id', $group->id)
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+        ;
 
         return inertia('Home', [
-
-            'selectedConversation' => $group->toConversationAray(),
+            'selectedConversation' => $group->toConversationArray(),
             'messages' => MessageResource::collection($messages),
 
         ]);
@@ -41,23 +51,25 @@ class MessageController extends Controller
 
     public function loadOlder(Message $message){//Ucitavanje starijih poruka
 
-        if ($message->gruop_id) {
+        if ($message->group_id) {
             
             $messages = Message::where('created_at', '<' , $message->created_at)
                 ->where('group_id', $message->group_id)
                 ->latest()
-                ->paginate(10);
+                ->paginate(10)
+            ;
 
         }else {
             $messages = Message::where('created_at', '<' , $message->created_at)
-                ->where(function($query) use ($message){
+                ->where(function   ($query) use ($message){
                     $query->where('sender_id', $message->sender_id)
                         ->where('receiver_id', $message->receiver_id)
                         ->orWhere('sender_id', $message->receiver_id)
                         ->where('receiver_id', $message->sender_id);
                 })
                 ->latest()
-                ->paginate(10);
+                ->paginate(10)
+            ;
         }
 
         return MessageResource::collection($messages);
@@ -80,13 +92,13 @@ class MessageController extends Controller
             
             foreach ($files as $file) {
 
-                $directory = 'attachents/' . Str::random(32);
+                $directory = 'attachments/' . Str::random(32);
                 Storage::makeDirectory($directory);
 
                 $model= [
                     'message_id' => $message->id,
                     'name' => $file->getClientOriginalName(),
-                    'mime' => $file-getCLientMimeType(),
+                    'mime' => $file-getClientMimeType(),
                     'size' => $file-getSize(),
                     'path' => $file->store($directory,'public'),
                 ];
@@ -105,7 +117,7 @@ class MessageController extends Controller
 
         if ($groupId) {
             
-            Gruop::updateGroupWithMessage($groupId, $message);
+            Group::updateGroupWithMessage($groupId, $message);
         }
 
         SocketMessage::dispatch($message);
