@@ -6,6 +6,7 @@ import { ChatBubbleLeftRightIcon } from '@heroicons/react/24/solid';
 import ConversationHeader from '@/Components/App/ConversationHeader';
 
 import MessageItem from '@/Components/App/MessageItem';
+import MessageInput from '@/Components/App/MessageInput';
 
 
 function Home({ selectedConversation = null, messages = null}) {
@@ -25,7 +26,6 @@ function Home({ selectedConversation = null, messages = null}) {
         setLocalMessages(messages ? messages.data.reverse() : []);
     }, [messages]);
 
-    //console.log(messages);
     
     return <>
         <>
@@ -65,7 +65,7 @@ function Home({ selectedConversation = null, messages = null}) {
                         )}
 
                     </div>
-                   {/* { <MessageInput conversation={selectedConversation}/> */}
+                    <MessageInput conversation={selectedConversation}/>
                 </>
             )}
         </>
