@@ -81,7 +81,7 @@ class MessageController extends Controller
         $data = $request->validated();
         $data['sender_id'] = auth()->id();
         $receiverId = $data['receiver_id'] ?? null;
-        $group_id = $data['group_id'] ?? null;
+        $groupId = $data['group_id'] ?? null;
 
         $files = $data['attachments'] ?? [];
 

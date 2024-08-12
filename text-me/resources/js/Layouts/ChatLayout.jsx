@@ -58,7 +58,7 @@ const ChatLayout = ({children}) => {
                 }
             })
         );
-    },[conversations]);
+    },[localConversations]);
 
 
     //treba da slusamo kad god je konverz promenjena
