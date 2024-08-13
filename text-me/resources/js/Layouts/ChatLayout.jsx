@@ -1,6 +1,7 @@
 
 import ConversationItem from "@/Components/App/ConversationItem";
 import TextInput from "@/Components/TextInput";
+import { useEventBus } from "@/EventBus";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
@@ -19,6 +20,7 @@ const ChatLayout = ({children}) => {
 
     const isUserOnline = (userId) => onlineUsers[userId]; //funkcija koja vraca objekat user ako postoji userId u online users
 
+    const {on} = useEventBus();
 
     const onSearch = (ev) => {
         const search = ev.target.value.toLowerCase();
@@ -33,6 +35,41 @@ const ChatLayout = ({children}) => {
             })
         );
     }
+
+    const messageCreated = (message)=>{
+        setLocalConversations((oldUsers) => {
+            return oldUsers.map((u) => {
+                if (
+                    message.receiver_id &&
+                    !u.is_group &&
+                    (u.id == message.sender_id || u.id == message.receiver_id)
+                ) {
+                    u.last_message = message.message;
+                    u.last_message_date = message.created_at;
+                    return u;
+                }
+
+                if (
+                    message.group_id &&
+                    u.is_group &&
+                    u.id == message.group_id
+                ) {
+                    u.last_message = message.message;
+                    u.last_message_date = message.created_at;
+                    return u;
+                }
+
+                return u;
+            });
+        });
+    };
+
+    useEffect(() => {
+        const offCreated = on("message.created", messageCreated);
+        return () => {
+            offCreated();
+        };
+    },[on]);
 
     useEffect(() => {
         setSortedConversations(

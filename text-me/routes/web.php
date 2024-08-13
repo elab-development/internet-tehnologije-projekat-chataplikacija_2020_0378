@@ -17,7 +17,7 @@ Route::middleware(['auth', 'verified'])->group(function() {
 
     Route::delete('/message/{message}', [MessageController::class , 'destroy'])->name('message.destroy');
 
-    Route::get('/message/older/{message}', [MessageController::class , 'loadOlder'])->name('mesage.loadOlder');
+    Route::get('/message/older/{message}', [MessageController::class , 'loadOlder'])->name('message.loadOlder');
 });
 
 
