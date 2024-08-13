@@ -67,7 +67,7 @@ function Home({ selectedConversation = null, messages = null}) {
 
 
             });
-    }, [localMessages, noMoreMessages]); 
+    }, [localMessages, noMoreMessages]);  
 
     //kad god se udje u novu konverzaciju stavljamo da je skrol na dnu odnosno prikazuju se najnovije poruke
     useEffect(() => {

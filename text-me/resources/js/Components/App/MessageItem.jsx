@@ -36,7 +36,7 @@ const MessageItem = ({ message })=>{
                     : "")
             }>
                 <div className="chat-message">
-                    <div className="chat-messahe-content">
+                    <div className="chat-message-content">
                         <ReactMarkdown>{message.message}</ReactMarkdown>
                     </div>
                 </div>
