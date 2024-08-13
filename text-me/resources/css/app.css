@@ -5,6 +5,7 @@
 #app{
     height: 100vh;
 }
+/*mozemo da promenimo theme popover-a za emojipicker i za category label*/
 
 .conversation-item .avatar.online:before,
 .conversation-item .avatar.offline:before {

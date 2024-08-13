@@ -1,13 +1,17 @@
 //import usestate
 //import heroicons
-import { useState } from "react";
+import { useState, Fragment } from "react";
 import NewMessageInput from "./NewMessageInput";
 import { FaceSmileIcon, HandThumbUpIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon } from "@heroicons/react/24/solid";
+import EmojiPicker from "emoji-picker-react";
+import { Transition } from '@headlessui/react'
+import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 
 const MessageInput = ({conversation = null}) => {
     const [newMessage, setNewMessage] = useState("");
     const [inputErrorMessage, setInputErrorMessage] = useState("");
     const [messageSending, setMessageSending] = useState(false);
+
     
     const onSendClick = () => {
         //kad pritisnemo enter dva puta za slanje poruke nece se poslati dve iste poruke u tom trenutku
@@ -32,6 +36,7 @@ const MessageInput = ({conversation = null}) => {
         }
 
         setMessageSending(true);
+
         axios.post(route("message.store"), formData, {
             onUploadProgress: (progressEvent) => {
                 const progress = Math.round((progressEvent.loaded / progressEvent.total) *100);
@@ -43,7 +48,28 @@ const MessageInput = ({conversation = null}) => {
         }).catch((error) => {
             setMessageSending(false);
         });
+        
     };
+
+    const onLikeClick = () => {
+        if (messageSending) {
+            return;
+        }
+        const data = {
+            message: "👍",
+
+        }
+        if(conversation.is_user) {
+            data["receiver_id"] = conversation.id;
+
+        }else if (conversation.is_group) {
+            data["group_id"] = conversation.id;
+        }
+
+       axios 
+       .post(route("message.store"), data);
+    };
+
 
      return(
         <div className="flex flex-wrap items-start border-t border-slate-700 py-3">
@@ -87,11 +113,21 @@ const MessageInput = ({conversation = null}) => {
                         <p className="text-xs text-red-400">{inputErrorMessage}</p>
                     )}
             </div>
+            
             <div className="order-3 xs:order-3 p-2 flex">
-                    <button className="p-1 text-gray-400 hover:text-gray-300">
-                        <FaceSmileIcon className="w-6 h-6" />
-                    </button>
-                    <button className="p-1 text-gray-400 hover:text-gray-300">
+                    <Popover className="relative">
+                        <PopoverButton className="p-1 text-gray-400 hover:text-gray-300">
+                            <FaceSmileIcon className="w-6 h-6" />
+                        </PopoverButton>
+                        <PopoverPanel className="absolute z-10 right-0 bottom-full">
+                            <EmojiPicker theme="light" onEmojiClick={(ev) => 
+                                setNewMessage(newMessage + ev.emoji)}>
+
+                            </EmojiPicker>
+                        </PopoverPanel>
+                    </Popover>
+                  
+                    <button onClick={onLikeClick} className="p-1 text-gray-400 hover:text-gray-300">
                         <HandThumbUpIcon className="w-6 h-6" />
                     </button>
             </div>
