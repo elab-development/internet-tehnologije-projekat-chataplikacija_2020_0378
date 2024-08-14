@@ -2,7 +2,7 @@
 //import heroicons
 import { useState, Fragment } from "react";
 import NewMessageInput from "./NewMessageInput";
-import { FaceSmileIcon, HandThumbUpIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon } from "@heroicons/react/24/solid";
+import { FaceSmileIcon, HandThumbUpIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import EmojiPicker from "emoji-picker-react";
 import { Transition } from '@headlessui/react'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
@@ -11,6 +11,25 @@ const MessageInput = ({conversation = null}) => {
     const [newMessage, setNewMessage] = useState("");
     const [inputErrorMessage, setInputErrorMessage] = useState("");
     const [messageSending, setMessageSending] = useState(false);
+
+    const [chosenFiles, setChosenFiles] = useState([]);
+    const [uploadProgress, setUploadProgress] = useState(0);
+
+    const onFileChange = (ev) => {
+        const files = ev.target.files;
+
+        const updatedFiles = [...files].map((file) => {
+            return {
+                file: file,
+                url: URL.createObjectURL(file),
+            };
+        });
+
+        setChosenFiles((prevFiles) => {
+            return [...prevFiles, ...updatedFiles];
+        });
+
+    };
 
     
     const onSendClick = () => {
@@ -27,6 +46,9 @@ const MessageInput = ({conversation = null}) => {
             return;
         }
         const formData = new FormData();
+        chosenFiles.forEach((file) => {
+            formData.append("attachments[]", file.file);
+        });
         formData.append("message", newMessage);
         if (conversation.is_user) {
             formData.append("receiver_id", conversation.id);
@@ -37,17 +59,30 @@ const MessageInput = ({conversation = null}) => {
 
         setMessageSending(true);
 
-        axios.post(route("message.store"), formData, {
-            onUploadProgress: (progressEvent) => {
-                const progress = Math.round((progressEvent.loaded / progressEvent.total) *100);
-                console.log(progress);
-            }
-        }).then((response)=>{
-            setNewMessage("");  
-            setMessageSending(false);
-        }).catch((error) => {
-            setMessageSending(false);
-        });
+        axios
+            .post(route("message.store"), formData, {
+                onUploadProgress: (progressEvent) => {
+                    const progress = Math.round(
+                        (progressEvent.loaded / progressEvent.total) *100
+                    );
+                    console.log(progress);
+                    setUploadProgress(progress);
+                }
+            })
+            .then((response) => {
+                setNewMessage("");  
+                setMessageSending(false);
+                setUploadProgress(0);
+                setChosenFiles([]);
+            })
+            .catch((error) => {
+                setMessageSending(false);
+                setChosenFiles([]);
+                const message = error?.response?.data?.message;
+                setInputErrorMessage(
+                    message || "An error occurred while sending message"
+                );
+            });
         
     };
 
@@ -79,6 +114,7 @@ const MessageInput = ({conversation = null}) => {
                     <input 
                         type="file"
                         multiple
+                        onChange={onFileChange}
                         className="absolute left-0 top-0 right-0 bottom-0 z-20 opacity-0 cursor-pointer"
                     />
                 </button>
@@ -88,6 +124,7 @@ const MessageInput = ({conversation = null}) => {
                         type="file"
                         multiple
                         accept="image/*"
+                        onChange={onFileChange}
                         className="absolute left-0 top-0 right-0 bottom-0 z-20 opacity-0 cursor-pointer"
                     />
                 </button>
@@ -108,10 +145,62 @@ const MessageInput = ({conversation = null}) => {
                             <PaperAirplaneIcon className="w-6" />
                             <span className="hidden sm:inline">Send</span>
                         </button>
-                    </div>
+                    </div>{" "}
+                    {!!uploadProgress && (
+                        <progress
+                            className="progress progress-info w-full"
+                            value={uploadProgress}
+                            max="100">
+
+                        </progress>
+                    )}
                     {inputErrorMessage && (
                         <p className="text-xs text-red-400">{inputErrorMessage}</p>
                     )}
+                    <div className="flex flex-wrap gap-1 mt-2">
+                        {chosenFiles.map((file) => (
+                            <div
+                                key={file.file.name}
+                                className={
+                                    `relative flex justify-between cursor-pointer` +
+                                    (!isImage(file.file) ? "w-[240px]" : "")
+                                }
+                            >
+                                {isImage(file.file) && (
+                                    <img
+                                        src={file.url}
+                                        alt=""
+                                        className="w-16 h-16 object-cover"
+                                    />
+                                )}
+                                {isAudio(file.file) && (
+                                    <CustomAudioPlayer
+                                        file={file}
+                                        showVolume={false}
+                                    />
+                                )}
+                                {!isAudio(file.file) && !isImage(file.file) && (
+                                    <AttachmentPreview file={file}/>
+                                )}
+
+                                <button
+                                    onClick={() => 
+                                        setChosenFiles(
+                                            chosenFiles.filter(
+                                                (f) => 
+                                                    f.file.name !== file.file.name
+                                            )
+                                        )
+                                    }
+                                    className="absolute w-6 h-6 rounded-full bg-gray-800 -right-2
+                                    -top-2 text-gray-300 hover:text-gray-100 z-10"
+                                >
+                                    <XCircleIcon className="w-6"/>
+                                </button>
+                                
+                            </div>
+                        ))}
+                    </div>
             </div>
             
             <div className="order-3 xs:order-3 p-2 flex">
