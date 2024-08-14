@@ -9,6 +9,7 @@ import MessageItem from '@/Components/App/MessageItem';
 import MessageInput from '@/Components/App/MessageInput';
 import { useEventBus } from '@/EventBus';
 import axios from 'axios';
+import AttachmentPreviewModal from '@/Components/App/AttachmentPreviewModal';
 
 
 function Home({ selectedConversation = null, messages = null}) {
@@ -18,6 +19,9 @@ function Home({ selectedConversation = null, messages = null}) {
     const messagesCtrRef = useRef(null);
     const [noMoreMessages, setNoMoreMessages] = useState(false);
     const [scrollFromBottom, setScrollFromBottom] = useState(0);
+
+    const [showAttachmentPreview, setShowAttachmentPreview] = useState(false);
+    const [previewAttachment, setPreviewAttachment] = useState({});
 
     const {on} = useEventBus();
 
@@ -68,6 +72,14 @@ function Home({ selectedConversation = null, messages = null}) {
 
             });
     }, [localMessages, noMoreMessages]);  
+
+    const onAttachmentClick = (attachments, ind) => {
+        setPreviewAttachment({
+            attachments,
+            ind,
+        });
+        setShowAttachmentPreview(true);
+    };
 
     //kad god se udje u novu konverzaciju stavljamo da je skrol na dnu odnosno prikazuju se najnovije poruke
     useEffect(() => {
@@ -155,16 +167,27 @@ function Home({ selectedConversation = null, messages = null}) {
                                 {localMessages.map((message) => (
                                     <MessageItem
                                         key={message.id}
-                                        message={message}   
+                                        message={message}
+                                        attachmentClick={onAttachmentClick}   
                                     />
                                 ))}
                             </div>
                         )}
 
-                    </div>
+                    </div> 
                     <MessageInput conversation={selectedConversation}/>
                 </>
             )}
+
+            {previewAttachment.attachments && (//Ovde se mozda bude promenilo na Model
+                <AttachmentPreviewModal
+                    attachments = {previewAttachment.attachments}
+                    index = {previewAttachment.ind}
+                    show = {showAttachmentPreview}
+                    onClose = {() => setShowAttachmentPreview(false)}
+                />
+            )}
+
         </>
     );
    

@@ -6,6 +6,9 @@ import { FaceSmileIcon, HandThumbUpIcon, PaperAirplaneIcon, PaperClipIcon, Photo
 import EmojiPicker from "emoji-picker-react";
 import { Transition } from '@headlessui/react'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
+import { isAudio, isImage} from "@/helpers";
+import AttachmentPreview from "./AttachmentPreview";
+import CustomAudioPlayer from "./CustomAudioPlayer";
 
 const MessageInput = ({conversation = null}) => {
     const [newMessage, setNewMessage] = useState("");
@@ -24,6 +27,7 @@ const MessageInput = ({conversation = null}) => {
                 url: URL.createObjectURL(file),
             };
         });
+        ev.target.value = null;
 
         setChosenFiles((prevFiles) => {
             return [...prevFiles, ...updatedFiles];
@@ -37,7 +41,7 @@ const MessageInput = ({conversation = null}) => {
         if (messageSending) {
             return;
         }
-        if (newMessage.trim() === "") {
+        if (newMessage.trim() === "" && chosenFiles.length === 0) {
             setInputErrorMessage("Please enter a message or upload attachments");
 
             setTimeout(()=> {
