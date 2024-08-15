@@ -2,7 +2,7 @@
 //import heroicons
 import { useState, Fragment } from "react";
 import NewMessageInput from "./NewMessageInput";
-import { FaceSmileIcon, HandThumbUpIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import { FaceSmileIcon, HandThumbUpIcon, HeartIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import EmojiPicker from "emoji-picker-react";
 import { Transition } from '@headlessui/react'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
@@ -11,6 +11,7 @@ import AttachmentPreview from "./AttachmentPreview";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import AudioRecorder from "./AudioRecorder";
 
+
 const MessageInput = ({conversation = null}) => {
     const [newMessage, setNewMessage] = useState("");
     const [inputErrorMessage, setInputErrorMessage] = useState("");
@@ -18,6 +19,9 @@ const MessageInput = ({conversation = null}) => {
 
     const [chosenFiles, setChosenFiles] = useState([]);
     const [uploadProgress, setUploadProgress] = useState(0);
+
+    
+
 
     const onFileChange = (ev) => {
         const files = ev.target.files;
@@ -38,6 +42,8 @@ const MessageInput = ({conversation = null}) => {
 
     
     const onSendClick = () => {
+      
+
         //kad pritisnemo enter dva puta za slanje poruke nece se poslati dve iste poruke u tom trenutku
         if (messageSending) {
             return;
@@ -96,7 +102,7 @@ const MessageInput = ({conversation = null}) => {
             return;
         }
         const data = {
-            message: "👍",
+            message: "❤️", //ili obican like kao thumb up
 
         }
         if(conversation.is_user) {
@@ -227,7 +233,8 @@ const MessageInput = ({conversation = null}) => {
                     </Popover>
                   
                     <button onClick={onLikeClick} className="p-1 text-gray-400 hover:text-gray-300">
-                        <HandThumbUpIcon className="w-6 h-6" />
+                        {/* <HandThumbUpIcon className="w-6 h-6" /> */}
+                        <HeartIcon className="w-6 h-6 pulse-animation" />
                     </button>
             </div>
         </div>

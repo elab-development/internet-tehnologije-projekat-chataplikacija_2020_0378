@@ -160,7 +160,7 @@ const ChatLayout = ({children}) => {
                         My Conversations 
                         <div
                         className="tooltip tooltip-left"
-                        data-tip="Create new Group"
+                        data-tip="Create New Group 🫂"
                         >
                             <button 
                             className="text-gray-400 hover:text-gray-200">
