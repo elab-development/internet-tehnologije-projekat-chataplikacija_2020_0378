@@ -25,7 +25,7 @@ const ConversationHeader =({selectedConversation})=>{
                                 {selectedConversation.name}
                                 {selectedConversation.is_group && (
                                     <p className="text-xs text-gray-500">
-                                        {selectedConversation.users.length}
+                                        {selectedConversation.users.lenght}
                                         members
                                     </p>
                                 )}
