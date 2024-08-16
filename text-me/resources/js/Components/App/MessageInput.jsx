@@ -2,7 +2,7 @@
 //import heroicons
 import { useState, Fragment } from "react";
 import NewMessageInput from "./NewMessageInput";
-import { FaceSmileIcon, HandThumbUpIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
+import { FaceSmileIcon, HandThumbUpIcon, HeartIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import EmojiPicker from "emoji-picker-react";
 import { Transition } from '@headlessui/react'
 import { Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
@@ -96,7 +96,7 @@ const MessageInput = ({conversation = null}) => {
             return;
         }
         const data = {
-            message: "👍",
+            message: "❤️",
 
         }
         if(conversation.is_user) {
@@ -227,7 +227,7 @@ const MessageInput = ({conversation = null}) => {
                     </Popover>
                   
                     <button onClick={onLikeClick} className="p-1 text-gray-400 hover:text-gray-300">
-                        <HandThumbUpIcon className="w-6 h-6" />
+                        <HeartIcon className="w-6 h-6 pulse-animation" />
                     </button>
             </div>
         </div>
