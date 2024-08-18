@@ -55,7 +55,7 @@ export default function UserOptionsDropdown({conversation}) {
                 >
                     <MenuItems className="absolute right-0 mt-2 w-48 rounded-md bg-gray-800 shadow-lg z-50">
                         <div className="px-1 py-1">
-                            <MenuButton>
+                            <MenuItem>
                                 {({ active }) => (
                                     <button 
                                         onClick={onBlockUser}
@@ -78,15 +78,15 @@ export default function UserOptionsDropdown({conversation}) {
 
                                     </button>
                                 )}
-                            </MenuButton>
+                            </MenuItem>
                         </div>
                         <div className="px-1 py-1">
-                            <MenuButton>
-                                {({ active }) => (
+                            <MenuItem>
+                                {({ focus }) => (
                                     <button 
                                         onClick={changeUserRole}
                                         className={` 
-                                            ${active ? "bg-black/30 text-white" : "text-gray-100"} 
+                                            ${focus ? "bg-black/30 text-white" : "text-gray-100"} 
                                             group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                     >
                                      {conversation.is_admin && (
@@ -104,7 +104,7 @@ export default function UserOptionsDropdown({conversation}) {
 
                                     </button>
                                 )}
-                            </MenuButton>
+                            </MenuItem>
                         </div>
                     </MenuItems>
                 </Transition>

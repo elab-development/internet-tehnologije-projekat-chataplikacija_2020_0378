@@ -134,9 +134,33 @@ class MessageController extends Controller
             return response()->json(['message'=>'Forbidden'], 403);
         }
 
+        $group=null;
+        $conversation=null;
+
+        //proveriti da li je poruka poruka grupe
+        if ($message->group_id) {
+            $group = Group::where('last_message_id', $message->id)->first();
+
+        }  else {
+            $conversation = Conversation::where('last_message_id', $message->id)->first();
+
+        }
+        
+
         $message->delete();
 
-        return response('', 204);
+        if ($group) {
+            //moramo da $group updateujemo sa poslednjim podacima iz baze
+            $group = Group::find($group->id);
+           $lastMessage = $group->lastMessage;
+        }else if($conversation) {
+            $conversation = Conversation::find($conversation->id);
+            $lastMessage = $conversation->lastMessage;
+        }
+
+        //return response('', 204);
+
+        return response()->json(['message' => $lastMessage ? new MessageResource($lastMessage) : null]);
 
     }
     

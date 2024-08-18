@@ -9,7 +9,7 @@ export const formatMessageDateLong = (date)=>{
         });
     }else if (isYesterday(inputDate)) {
         return (
-            "Yesterday" +
+            "Yesterday " +
             inputDate.toLocaleTimeString([],{
                 hour: '2-digit',
                 minute: '2-digit',

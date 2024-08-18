@@ -64,10 +64,22 @@ const ChatLayout = ({children}) => {
         });
     };
 
+    const messageDeleted = ({prevMessage})=>{
+        if(!prevMessage) {
+            return;
+        }
+
+        //pronadji konverzaciju na osnovu prethodne poruke i updateuj lastmsgid i datum
+        messageCreated(prevMessage);
+    };
+
     useEffect(() => {
+        
         const offCreated = on("message.created", messageCreated);
+        const offDeleted = on("message.deleted", messageDeleted);
         return () => {
             offCreated();
+            offDeleted();
         };
     },[on]);
 
