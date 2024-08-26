@@ -1,5 +1,6 @@
 
 import ConversationItem from "@/Components/App/ConversationItem";
+import GroupModal from "@/Components/App/GroupModal";
 import TextInput from "@/Components/TextInput";
 import { useEventBus } from "@/EventBus";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
@@ -12,11 +13,11 @@ const ChatLayout = ({children}) => {
     const page = usePage();
     const conversations = page.props.conversations;
     const selectedConversation = page.props.selectedConversation;
-
     const [localConversations, setLocalConversations] = useState([]); //bice updateovana localConv kad god je conversations primljena
     const [sortedConversations, setSortedConversations] = useState([]);
-
     const [onlineUsers, setOnlineUsers] = useState({}); //kad god se neko pridruzi kanalu ubacicemo ga u onlineUsers
+    const [showGroupModal, setShowGroupModal] = useState(false);
+
 
     const isUserOnline = (userId) => onlineUsers[userId]; //funkcija koja vraca objekat user ako postoji userId u online users
 
@@ -77,9 +78,13 @@ const ChatLayout = ({children}) => {
         
         const offCreated = on("message.created", messageCreated);
         const offDeleted = on("message.deleted", messageDeleted);
+        const offModalShow = on("GroupModal.show", (group) => {
+            setShowGroupModal(true);
+        });
         return () => {
             offCreated();
             offDeleted();
+            offModalShow();
         };
     },[on]);
 
@@ -174,7 +179,8 @@ const ChatLayout = ({children}) => {
                         className="tooltip tooltip-left"
                         data-tip="Create new Group"
                         >
-                            <button 
+                            <button
+                            onClick={(ev) => setShowGroupModal(true)} 
                             className="text-gray-400 hover:text-gray-200">
                                 <PencilSquareIcon className="size-6 text-blue-500" />
                             </button>
@@ -205,6 +211,10 @@ const ChatLayout = ({children}) => {
             </div>
 
            </div>
+           <GroupModal 
+                show={showGroupModal} 
+                onClose={() => setShowGroupModal(false)} 
+            />
         </>
     );
 }

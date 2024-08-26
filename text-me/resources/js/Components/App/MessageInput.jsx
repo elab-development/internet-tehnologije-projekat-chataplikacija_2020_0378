@@ -226,7 +226,7 @@ const MessageInput = ({conversation = null}) => {
                         </PopoverPanel>
                     </Popover>
                   
-                    <button onClick={onLikeClick} className="p-1 text-gray-400 hover:text-gray-300">
+                    <button onClick={onLikeClick} className="p-1 text-gray-400 hover:text-pink-500">
                         <HeartIcon className="w-6 h-6 pulse-animation" />
                     </button>
             </div>
