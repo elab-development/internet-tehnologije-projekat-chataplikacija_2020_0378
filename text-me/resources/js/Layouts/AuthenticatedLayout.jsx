@@ -7,6 +7,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { useEventBus } from '@/EventBus';
 import Toast from '@/Components/App/Toast';
 import NewMessageNotification from '@/Components/App/NewMessageNotification';
+//import Echo from 'laravel-echo';
 
 export default function Authenticated({ header, children }) {
     const page = usePage();
@@ -30,35 +31,47 @@ export default function Authenticated({ header, children }) {
             }
 
             Echo.private(channel)
-            .error((error) => {
-                console.error(error);
-            })
-            .listen("SocketMessage", (e) => {
-                console.log("SocketMessage",e);
-                const message = e.message;
+                .error((error) => {
+                    console.error(error);
+                })
+                .listen("SocketMessage", (e) => {
+                        console.log("SocketMessage",e);
+                        const message = e.message;
 
-                //ako nismo trenutno u chat-u sa onim ko nam je poslao poruku prikazuje se notifikacija
+                        //ako nismo trenutno u chat-u sa onim ko nam je poslao poruku prikazuje se notifikacija
 
-                emit("message.created", message);
+                        emit("message.created", message);
 
-                if (message.sender_id === user.id) {
-                    return;
-                }
+                        if (message.sender_id === user.id) {
+                            return;
+                        }
 
-                emit("NewMessageNotification", {
-                    user: message.sender,
-                    group_id: message.group_id,
-                    message: 
-                        message.message || 
-                        `Shared ${
-                            message.attachments.length === 1
-                             ? "an attachment"
-                             : message.attachments.length + 
-                             " attachments"
-                        }`,
+                        emit("NewMessageNotification", {
+                            user: message.sender,
+                            group_id: message.group_id,
+                            message: 
+                                message.message || 
+                                `Shared ${
+                                    message.attachments.length === 1
+                                    ? "an attachment"
+                                    : message.attachments.length + 
+                                    " attachments"
+                                }`,
 
+                        });
                 });
-            });
+
+            if (conversation.is_group) {
+                Echo.private(`group.deleted.${conversation.id}`)
+                    .listen("GroupDeleted", (e) => {
+                        //console.log("GroupDeleted", e);
+                        //debugger;
+                        emit("group.deleted", {id: e.id, name: e.name });
+                })
+                .error(e => {
+                    console.error(e);
+                });
+            }
         });
 
         return() => {
@@ -74,6 +87,10 @@ export default function Authenticated({ header, children }) {
                         .join("-")}`;
                 }
                 Echo.leave(channel);
+
+                if (conversation.is_group) {
+                    Echo.leave(`group.deleted.${conversation.id}`);
+                }
             });
         };
     },[conversations]);

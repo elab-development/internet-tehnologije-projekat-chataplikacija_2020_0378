@@ -4,7 +4,7 @@ import GroupModal from "@/Components/App/GroupModal";
 import TextInput from "@/Components/TextInput";
 import { useEventBus } from "@/EventBus";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
-import { usePage } from "@inertiajs/react";
+import { router, usePage } from "@inertiajs/react";
 import { useEffect, useState } from "react";
 
 
@@ -21,7 +21,7 @@ const ChatLayout = ({children}) => {
 
     const isUserOnline = (userId) => onlineUsers[userId]; //funkcija koja vraca objekat user ako postoji userId u online users
 
-    const {on} = useEventBus();
+    const {emit, on} = useEventBus();
 
     const onSearch = (ev) => {
         const search = ev.target.value.toLowerCase();
@@ -81,10 +81,28 @@ const ChatLayout = ({children}) => {
         const offModalShow = on("GroupModal.show", (group) => {
             setShowGroupModal(true);
         });
+
+        const offGroupDelete = on ("group.deleted", ({id, name}) => {
+            setLocalConversations((oldConversations) => {
+                return oldConversations.filter((con) => con.id != id);
+            });
+
+            emit("toast.show", `Group "${name}" was deleted`);
+
+            if (
+                !selectedConversation ||
+                selectedConversation.is_group &&
+                selectedConversation.id == id
+            ) {
+                router.visit(route("dashboard"));
+            }
+        }); 
+
         return () => {
             offCreated();
             offDeleted();
             offModalShow();
+            offGroupDelete();
         };
     },[on]);
 
