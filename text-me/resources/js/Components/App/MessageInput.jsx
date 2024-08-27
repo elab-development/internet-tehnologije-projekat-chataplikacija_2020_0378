@@ -218,7 +218,7 @@ const MessageInput = ({conversation = null}) => {
                         <PopoverButton className="p-1 text-gray-400 hover:text-gray-300">
                             <FaceSmileIcon className="w-6 h-6" />
                         </PopoverButton>
-                        <PopoverPanel className="absolute z-10 right-0 bottom-full">
+                        <PopoverPanel className="absolute z-40 right-0 bottom-full">
                             <EmojiPicker theme="light" onEmojiClick={(ev) => 
                                 setNewMessage(newMessage + ev.emoji)}>
 

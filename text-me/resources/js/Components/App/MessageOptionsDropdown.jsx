@@ -27,7 +27,7 @@ export default function MessageOptionsDropdown({message}) {
         <div className="absolute right-full text-gray-100 top-1/2 -translate-y-1/2 z-10">
             <Menu as="div" className="relative inline-block text-left">
                 <div>
-                    <MenuButton className="flex justify-center items-center w-8 h-8 rounded-full hover:bg-black/40">
+                    <MenuButton className=" flex justify-center items-center w-8 h-8 rounded-full hover:bg-black/40">
                         <EllipsisVerticalIcon className="h-5 w-5" />
                     </MenuButton>
                 </div>
