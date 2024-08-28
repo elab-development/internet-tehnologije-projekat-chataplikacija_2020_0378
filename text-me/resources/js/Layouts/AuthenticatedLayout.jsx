@@ -7,7 +7,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { useEventBus } from '@/EventBus';
 import Toast from '@/Components/App/Toast';
 import NewMessageNotification from '@/Components/App/NewMessageNotification';
-//import Echo from 'laravel-echo';
+
 
 export default function Authenticated({ header, children }) {
     const page = usePage();

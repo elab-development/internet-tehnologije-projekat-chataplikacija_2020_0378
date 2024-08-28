@@ -1,9 +1,12 @@
+import { useEventBus } from "@/EventBus";
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react";
 import { EllipsisVerticalIcon, LockClosedIcon, LockOpenIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import { Fragment } from "react";
 
 export default function UserOptionsDropdown({conversation}) {
+    const {emit} = useEventBus();
+
     const changeUserRole = () => {
         console.log("Change User Role");
         if (!conversation.is_user) {
@@ -12,6 +15,7 @@ export default function UserOptionsDropdown({conversation}) {
         axios 
             .post(route("user.changeRole", conversation.id))
             .then((response) => {
+                emit("toast.show", response.data.message);
                 console.log(response.data);
             })
             .catch((error) => {
@@ -27,6 +31,7 @@ export default function UserOptionsDropdown({conversation}) {
         axios
             .post(route("user.blockUnblock", conversation.id))
             .then((response) => {
+                emit("toast.show", response.data.message);
                 console.log(response.data);
             })
             .catch((error) => {
@@ -44,7 +49,7 @@ export default function UserOptionsDropdown({conversation}) {
                         <EllipsisVerticalIcon className="h-5 w-5" />
                     </MenuButton>
                 </div>
-                <Transition 
+                {/* <Transition 
                     as={Fragment}
                     enter="transition ease-out duration-100"
                     enterFrom="transform opacity-0 scale-95"
@@ -52,15 +57,15 @@ export default function UserOptionsDropdown({conversation}) {
                     leave="transition ease-in duration-75"
                     leaveFrom="transform opacity-100 scale-100"
                     leaveTo="transform opacity-0 scale-95"
-                >
+                > */}
                     <MenuItems className="absolute right-0 mt-2 w-48 rounded-md bg-gray-800 shadow-lg z-50">
                         <div className="px-1 py-1">
                             <MenuItem>
-                                {({ active }) => (
+                                {({ focus }) => (
                                     <button 
                                         onClick={onBlockUser}
-                                        className={` 
-                                            ${active ? "bg-black/30 text-white" : "text-gray-100"} 
+                                        className={`
+                                            ${focus ? "bg-black/30 text-white" : "text-gray-100"} 
                                             group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                     >
                                         {conversation.blocked_at && (
@@ -107,7 +112,7 @@ export default function UserOptionsDropdown({conversation}) {
                             </MenuItem>
                         </div>
                     </MenuItems>
-                </Transition>
+                {/* </Transition> */}
             </Menu>
         </div>
     )
