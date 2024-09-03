@@ -31,3 +31,6 @@ class MessageResource extends JsonResource
         ];
     }
 }
+
+
+//'sender'=> new UserResource($this->sender),

@@ -17,6 +17,48 @@ use Illuminate\Support\Str;
 
 class MessageController extends Controller
 {
+
+    public function index(){
+
+        $messages = Message::all();
+
+        return $messages;
+
+    }
+
+    public function show($message_id){
+
+        try {
+            
+            $message = new MessageResource(Message::find($message_id));
+
+            return response()->json($message);
+
+        } catch (\Exception $e) {
+            
+            return response()->json(['error' => 'Data not found'], 404);
+        }
+
+
+
+
+
+
+        // $message = new MessageResource(Message::find($message_id));
+        
+        // if (is_null($message)) {
+        //     return response()->json('Data not found', 404);
+        // }
+
+       
+
+
+        //return new MessageResource(Message::findOrFail($message_id));
+
+    }
+
+    //////////////////////////////////////////////////
+
     public function byUser(User $user){//Ucitavanje poruke korisnika
 
         $messages = Message::where('sender_id', auth()->id())

@@ -12,6 +12,19 @@ class GroupController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
+
+    public function index(){
+
+        return Group::all();
+
+
+
+
+    }
+
+
+
     public function store(StoreGroupRequest $request)
     {
         $data = $request->validated();
@@ -35,6 +48,7 @@ class GroupController extends Controller
         $group->users()->detach();
         $group->users()->attach(array_unique([$request->user()->id, ...$user_ids]));
 
+        //return response()->json($group);
         return redirect()->back();
     }
 
