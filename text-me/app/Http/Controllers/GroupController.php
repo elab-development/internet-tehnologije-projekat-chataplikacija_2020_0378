@@ -18,11 +18,17 @@ class GroupController extends Controller
 
         return Group::all();
 
-
-
-
     }
 
+    public function show($group_id){
+
+        $group = Group::find($group_id);
+        if (is_null($group)) {
+            return response()->json('Data not found', 404);
+        }
+        return response()->json($group);
+
+    }
 
 
     public function store(StoreGroupRequest $request)

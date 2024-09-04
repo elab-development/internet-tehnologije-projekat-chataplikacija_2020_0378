@@ -11,26 +11,29 @@ use App\Http\Controllers\UserController;
 
 
 
-Route::get('/messages/{id}', [MessageController::class, 'show']);
 
-Route::get('/messages', [MessageController::class, 'index']);
+Route::resource('messages', MessageController::class);
 
 ///////////////////////////////////////////////////////////////
 
 Route::get('/groups', [GroupController::class, 'index']);
 
-Route::patch('/groups/update/{group}', [GroupController::class, 'update']);
+Route::get('/groups/{id}', [GroupController::class, 'show']);
 
 ///////////////////////////////////////////////////////////////
 
-
 Route::get('/users', [UserController::class, 'index']);
 
+Route::get('/users/{id}', [UserController::class, 'show']);
 
+///////////////////////////////////////////////////////////////
 
 Route::get('/test', function () {
     return response()->json(['message' => 'This is a test route']);
 });
+
+
+
 
 
 
