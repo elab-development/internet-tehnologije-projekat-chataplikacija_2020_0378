@@ -20,11 +20,23 @@ Route::get('/groups', [GroupController::class, 'index']);
 
 Route::get('/groups/{id}', [GroupController::class, 'show']);
 
+Route::post('/groups', [GroupController::class, 'store']);
+
+Route::put('/groups/{id}', [GroupController::class, 'update']);
+
+Route::delete('/groups/{id}', [GroupController::class, 'destroy']);
+
 ///////////////////////////////////////////////////////////////
 
 Route::get('/users', [UserController::class, 'index']);
 
 Route::get('/users/{id}', [UserController::class, 'show']);
+
+Route::post('/users', [UserController::class, 'store']);
+
+Route::put('/users/{id}', [UserController::class, 'update']);
+
+Route::delete('/users/{id}', [UserController::class, 'destroy']);
 
 ///////////////////////////////////////////////////////////////
 
