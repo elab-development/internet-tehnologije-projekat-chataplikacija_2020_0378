@@ -39,7 +39,7 @@ class GroupController extends Controller
 
     public function store(Request $request)
     {
-        //return response()->json('Cao', 200);
+        return response()->json('Cao', 200);
 
         $validator = Validator::make($request->all(), [
             'name' => 'required|string|max:255',

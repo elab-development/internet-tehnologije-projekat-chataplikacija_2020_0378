@@ -7,9 +7,6 @@ use App\Http\Controllers\GroupController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/users', [UserController::class, 'index']);
-Route::get('/users/{id}', [UserController::class, 'show']);
-
 Route::get('/test-web', function () {
     return response()->json(['message' => 'Web route test']);
 });
