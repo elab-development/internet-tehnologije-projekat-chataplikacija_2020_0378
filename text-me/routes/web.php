@@ -20,19 +20,19 @@ Route::middleware(['auth', 'verified', 'active'])->group(function() {
 
     Route::get('group/{group}', [MessageController::class , 'byGroup'])->name('chat.group');
 
-    Route::post('/message', [MessageController::class , 'store'])->name('message.store');
+    Route::post('/message', [MessageController::class , 'store1'])->name('message.store');
 
-    Route::delete('/message/{message}', [MessageController::class , 'destroy'])->name('message.destroy');
+    Route::delete('/message/{message}', [MessageController::class , 'destroy1'])->name('message.destroy');
 
     Route::get('/message/older/{message}', [MessageController::class , 'loadOlder'])->name('message.loadOlder');
 
     //////////////////////////////////////////////////////////////////////////////////////
 
-    Route::post('/group', [GroupController::class, 'store'])->name('group.store');
+    Route::post('/group', [GroupController::class, 'store1'])->name('group.store');
 
-    Route::put('/group/{group}', [GroupController::class, 'update'])->name('group.update');
+    Route::put('/group/{group}', [GroupController::class, 'update1'])->name('group.update');
 
-    Route::delete('/group/{group}', [GroupController::class, 'destroy'])->name('group.destroy');
+    Route::delete('/group/{group}', [GroupController::class, 'destroy1'])->name('group.destroy');
 
     ///////////////////////////////////////////////////////////////////////////////////////
 

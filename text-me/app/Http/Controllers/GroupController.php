@@ -96,44 +96,44 @@ class GroupController extends Controller
 
     ///////////////////////////////////////////////////////////////////
 
-    // public function store(StoreGroupRequest $request)
-    // {
-    //     $data = $request->validated();
-    //     $user_ids = $data['user_ids'] ?? [];
-    //     $group = Group::create($data);
-    //     $group->users()->attach(array_unique([$request->user()->id, ...$user_ids]));
+    public function store1(StoreGroupRequest $request)
+    {
+        $data = $request->validated();
+        $user_ids = $data['user_ids'] ?? [];
+        $group = Group::create($data);
+        $group->users()->attach(array_unique([$request->user()->id, ...$user_ids]));
 
-    //     return redirect()->back();
-    // }
+        return redirect()->back();
+    }
 
-    // /**
-    //  * Update the specified resource in storage.
-    //  */
-    // public function update(UpdateGroupRequest $request, Group $group)
-    // {
-    //     $data = $request->validated();
-    //     $user_ids = $data['user_ids'] ?? [];
-    //     $group->update($data);
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update1(UpdateGroupRequest $request, Group $group)
+    {
+        $data = $request->validated();
+        $user_ids = $data['user_ids'] ?? [];
+        $group->update($data);
 
-    //     //Uklanjanje svih korisnika i dodavanje novih
-    //     $group->users()->detach();
-    //     $group->users()->attach(array_unique([$request->user()->id, ...$user_ids]));
+        //Uklanjanje svih korisnika i dodavanje novih
+        $group->users()->detach();
+        $group->users()->attach(array_unique([$request->user()->id, ...$user_ids]));
 
-    //     return redirect()->back();
-    // }
+        return redirect()->back();
+    }
 
-    // /**
-    //  * Remove the specified resource from storage.
-    //  */
-    // public function destroy(Group $group)
-    // {
-    //     //Provera da li je vlasnik grupe
-    //     if ($group->owner_id !== auth()->id()) {
-    //         abort(403);
-    //     }
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy1(Group $group)
+    {
+        //Provera da li je vlasnik grupe
+        if ($group->owner_id !== auth()->id()) {
+            abort(403);
+        }
 
-    //     DeleteGroupJob::dispatch($group)->delay(now()->addSeconds(10));
+        DeleteGroupJob::dispatch($group)->delay(now()->addSeconds(10));
 
-    //     return response()->json(['message' => 'Group delete was scheduled and it will be deleted soon']);
-    // }
+        return response()->json(['message' => 'Group delete was scheduled and it will be deleted soon']);
+    }
 }
