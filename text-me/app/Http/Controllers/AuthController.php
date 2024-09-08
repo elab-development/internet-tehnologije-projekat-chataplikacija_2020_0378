@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use App\Models\User;
+use App\Http\Resources\UserResource;
 
 class AuthController extends Controller
 {
@@ -31,7 +32,10 @@ class AuthController extends Controller
         'password' => bcrypt($request->input('password')),
     ]);
 
-    return response()->json(['message' => 'You have registered successfully!'], 201);
+    return response()->json([
+        'message' => 'You have registered successfully!',
+        'user' => new UserResource($user),
+    ], 201);
 
     // $token = $user->createToken('auth_token')->plainTextToken;
 
@@ -58,7 +62,11 @@ class AuthController extends Controller
             $user = Auth::user();
             $token = $user->createToken('BearerToken')->plainTextToken;
 
-            return response()->json(['token'=>$token], 200);
+            return response()->json([
+                'token'=>$token,
+                'token_type' => 'Bearer',
+                'user' => new UserResource($user),
+            ], 200);
         }
         else {
             return response()->json(['message' => 'Login failed'], 401);

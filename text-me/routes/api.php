@@ -18,6 +18,10 @@ Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth:sanc
 
 //////////////////////////////////////////////////////////////
 
+// Route::middleware('auth:sanctum')->group(function () {
+//     Route::resource('messages', MessageController::class);
+// });
+
 Route::resource('messages', MessageController::class)->middleware('auth:sanctum');
 
 ///////////////////////////////////////////////////////////////
