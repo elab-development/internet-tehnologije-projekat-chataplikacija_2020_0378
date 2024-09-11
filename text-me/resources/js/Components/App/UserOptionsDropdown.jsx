@@ -3,6 +3,7 @@ import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/r
 import { EllipsisVerticalIcon, LockClosedIcon, LockOpenIcon, ShieldCheckIcon, UserIcon } from "@heroicons/react/24/solid";
 import axios from "axios";
 import { Fragment } from "react";
+import { usePage } from "@inertiajs/react";
 
 export default function UserOptionsDropdown({conversation}) {
     const {emit} = useEventBus();
@@ -94,7 +95,7 @@ export default function UserOptionsDropdown({conversation}) {
                                             ${focus ? "bg-black/30 text-white" : "text-gray-100"} 
                                             group flex w-full items-center rounded-md px-2 py-2 text-sm`}
                                     >
-                                     {conversation.is_admin && (
+                                    {conversation.is_admin && (
                                             <>
                                                 <UserIcon className="w-4 h-4 mr-2" />
                                                 Make Regular User 
@@ -111,6 +112,7 @@ export default function UserOptionsDropdown({conversation}) {
                                 )}
                             </MenuItem>
                         </div>
+
                     </MenuItems>
                 {/* </Transition> */}
             </Menu>

@@ -19,6 +19,12 @@ const ChatLayout = ({children}) => {
     const [showGroupModal, setShowGroupModal] = useState(false);
 
 
+    const { user: currentUser } = usePage().props.auth;
+    // Uslov za kreiranje grupe
+    const canShowButton = currentUser.role == 'admin' || currentUser.role == 'premium';
+
+
+    
     const isUserOnline = (userId) => onlineUsers[userId]; //funkcija koja vraca objekat user ako postoji userId u online users
 
     const {emit, on} = useEventBus();
@@ -200,7 +206,9 @@ const ChatLayout = ({children}) => {
                             <button
                             onClick={(ev) => setShowGroupModal(true)} 
                             className="text-gray-400 hover:text-gray-200">
-                                <PencilSquareIcon className="size-6 text-blue-500" />
+                                {canShowButton && (
+                                    <PencilSquareIcon className="size-6 text-blue-500" /> 
+                                )}
                             </button>
                         </div>
                     </div>

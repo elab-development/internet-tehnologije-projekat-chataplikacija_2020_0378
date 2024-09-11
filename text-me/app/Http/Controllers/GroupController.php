@@ -19,6 +19,9 @@ class GroupController extends Controller
 
     public function index(){
 
+        return response()->json(['message' => 'cao']);
+
+
         return GroupResource::collection(Group::all());
 
     }

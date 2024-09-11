@@ -22,6 +22,8 @@ class MessageController extends Controller
 
     public function index(){//GET
 
+        return response()->json(['message' => 'cao']);
+
         return MessageResource::collection(Message::all());
 
     }

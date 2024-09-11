@@ -8,7 +8,11 @@ import MessageOptionsDropdown from "./MessageOptionsDropdown";
 
 
 const MessageItem = ({ message, attachmentClick })=>{
-    const currentUser = usePage().props.auth.user;
+    //const currentUser = usePage().props.auth.user;
+
+    const { user: currentUser } = usePage().props.auth;
+    // Uslov za prikaz tri tačke
+    const canShowOptions = currentUser.role !== 'user' && message.sender_id === currentUser.id;
 
     return (
         <div
@@ -37,7 +41,10 @@ const MessageItem = ({ message, attachmentClick })=>{
                     ? "chat-bubble-info"
                     : "")
             }>
-                {message.sender_id == currentUser.id && (
+                {/* {message.sender_id == currentUser.id && (
+                    <MessageOptionsDropdown message={message} /> 
+                )} */}
+                {canShowOptions && (
                     <MessageOptionsDropdown message={message} /> 
                 )}
                 <div className="chat-message">

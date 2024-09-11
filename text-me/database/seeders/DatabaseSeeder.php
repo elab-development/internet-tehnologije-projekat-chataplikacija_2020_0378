@@ -16,18 +16,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        //Generisanje dva usera
+        //Generisanje tri usera
         User::factory()->create([
             'name' => 'John Doe',
             'email' => 'john@example.com',
             'password' => bcrypt('password'),
-            'is_admin' => true
+            'is_admin' => true,
+            'role' => User::ROLE_ADMIN //John je admin
         ]);
         User::factory()->create([
             'name' => 'Jane Doe',
             'email' => 'jane@example.com',
             'password' => bcrypt('password'),
+            'role' => User::ROLE_PREMIUM, // Jane je premium korisnik
         ]);
+
+        User::factory()->create([
+            'name' => 'Bob User',
+            'email' => 'bob@example.com',
+            'password' => bcrypt('password'),
+            'role' => User::ROLE_USER, // Bob je običan korisnik
+        ]);
+
         //Generisanje 10 random usera
         User::factory(10)->create();
 
