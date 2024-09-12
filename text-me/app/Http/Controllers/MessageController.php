@@ -233,11 +233,15 @@ class MessageController extends Controller
 
     public function destroy1(Message $message){//Brisanje poruka
 
+        //return response()->json(['message'=>'Caooo']);
+
         //Provera da je user poslao poruku
         if ($message->sender_id !== auth()->id()) {
             
             return response()->json(['message'=>'Forbidden'], 403);
         }
+
+        //return response()->json(['message'=>'Caooo']);
 
         $group = null;
         $conversation = null;
@@ -251,7 +255,11 @@ class MessageController extends Controller
 
         }
 
+        //return response()->json(['message'=>'Caooo']);
+
         $message->delete();
+
+        //return response()->json(['message'=>'Caooo']);
 
         $lastMessage = null; 
 

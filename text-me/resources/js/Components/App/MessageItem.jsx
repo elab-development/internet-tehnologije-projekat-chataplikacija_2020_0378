@@ -12,7 +12,7 @@ const MessageItem = ({ message, attachmentClick })=>{
 
     const { user: currentUser } = usePage().props.auth;
     // Uslov za prikaz tri tačke
-    const canShowOptions = currentUser.role !== 'user' && message.sender_id === currentUser.id;
+    const canShowOptions = (currentUser.is_admin || currentUser.role !== 'user') && message.sender_id === currentUser.id;
 
     return (
         <div

@@ -21,7 +21,7 @@ const ChatLayout = ({children}) => {
 
     const { user: currentUser } = usePage().props.auth;
     // Uslov za kreiranje grupe
-    const canShowButton = currentUser.role == 'admin' || currentUser.role == 'premium';
+    const canShowButton = currentUser.role == 'admin' || currentUser.role == 'premium' || currentUser.is_admin == 1;
 
 
     

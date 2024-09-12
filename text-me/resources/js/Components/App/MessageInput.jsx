@@ -21,7 +21,10 @@ const MessageInput = ({conversation = null}) => {
 
 
     const { user: currentUser } = usePage().props.auth;
-    const canShowButton = currentUser.role == 'admin' || currentUser.role == 'premium';
+    const canShowButton = currentUser.role == 'admin' || currentUser.role == 'premium' || currentUser.is_admin == 1;
+
+
+    console.log(canShowButton);
 
 
     const [chosenFiles, setChosenFiles] = useState([]);
