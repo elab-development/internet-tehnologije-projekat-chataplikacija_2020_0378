@@ -29,14 +29,14 @@ const MessageInput = ({conversation = null}) => {
 
     const [chosenGif, setChosenGif] = useState(null);  // Drži odabrani GIF //dodato
     
-    const isValidUrl = (url) => {
-        try {
-            new URL(url);
-            return true;
-        } catch {
-            return false;
-        }
-    };
+    // const isValidUrl = (url) => {
+    //     try {
+    //         new URL(url);
+    //         return true;
+    //     } catch {
+    //         return false;
+    //     }
+    // };
 
     
 
@@ -66,48 +66,48 @@ const MessageInput = ({conversation = null}) => {
 
         console.log("Chosen GIF URL:", chosenGif);
     
-        if (chosenGif) {
-            if (!isValidUrl(chosenGif.url)) {
-                setInputErrorMessage("Invalid GIF URL");
-                setTimeout(() => setInputErrorMessage(""), 3000);
-                return;
-            }
+        // if (chosenGif) {
+        //     if (!isValidUrl(chosenGif.url)) {
+        //         setInputErrorMessage("Invalid GIF URL");
+        //         setTimeout(() => setInputErrorMessage(""), 3000);
+        //         return;
+        //     }
 
-            const formData = new FormData();
-            formData.append("gif_url", chosenGif.url);
+        //     const formData = new FormData();
+        //     formData.append("gif_url", chosenGif.url);
 
     
-            if (conversation.is_user) {
-                formData.append("receiver_id", conversation.id);
-            } else if (conversation.is_group) {
-                formData.append("group_id", conversation.id);
-            }
+        //     if (conversation.is_user) {
+        //         formData.append("receiver_id", conversation.id);
+        //     } else if (conversation.is_group) {
+        //         formData.append("group_id", conversation.id);
+        //     }
     
-            setMessageSending(true);
+        //     setMessageSending(true);
     
-            axios
-                .post(route("message.store"), formData)
-                .then((response) => {
-                    setNewMessage("");
-                    setMessageSending(false);
-                    setUploadProgress(0);
-                    setChosenFiles([]);
-                    setChosenGif(null);
-                })
-                .catch((error) => {
-                    setMessageSending(false);
-                    setChosenFiles([]);
-                    const message = error?.response?.data?.message;
-                    setInputErrorMessage(message || "An error occurred while sending message");
-                });
+        //     axios
+        //         .post(route("message.store"), formData)
+        //         .then((response) => {
+        //             setNewMessage("");
+        //             setMessageSending(false);
+        //             setUploadProgress(0);
+        //             setChosenFiles([]);
+        //             setChosenGif(null);
+        //         })
+        //         .catch((error) => {
+        //             setMessageSending(false);
+        //             setChosenFiles([]);
+        //             const message = error?.response?.data?.message;
+        //             setInputErrorMessage(message || "An error occurred while sending message");
+        //         });
     
             
-            return;  // Zaustavi dalji rad ako šaljemo samo GIF
-        }
+        //     return;  // Zaustavi dalji rad ako šaljemo samo GIF
+        // }
     
        
 
-         if (newMessage.trim() === "" && chosenFiles.length === 0) { //dodat treci uslov
+         if (newMessage.trim() === "" && chosenFiles.length === 0 && !chosenGif) { //dodat treci uslov
             setInputErrorMessage("Please enter a message or upload attachments");
 
             setTimeout(()=> {
@@ -120,6 +120,10 @@ const MessageInput = ({conversation = null}) => {
             formData.append("attachments[]", file.file);
         });
         formData.append("message", newMessage);
+
+        if (chosenGif) {
+            formData.append("gif_url", chosenGif);  //  .images.original.url
+        }
 
         if (conversation.is_user) {
             formData.append("receiver_id", conversation.id);
@@ -312,6 +316,7 @@ const MessageInput = ({conversation = null}) => {
             </div>
             
             <div className="order-3 xs:order-3 p-2 flex">
+            {canShowButton && (
                     <Popover className="relative">
                         <PopoverButton className="p-1 text-gray-400 hover:text-gray-300">
                             <FaceSmileIcon className="w-6 h-6" />
@@ -323,7 +328,7 @@ const MessageInput = ({conversation = null}) => {
                             </EmojiPicker>
                         </PopoverPanel>
                     </Popover>
-                                       
+            )}             
                 <Popover className="relative">  
                     <PopoverButton className="p-1 text-gray-400 hover:text-gray-300">
                         GIF 

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Dialog, DialogPanel, DialogTitle, Transition } from '@headlessui/react';
 import { Fragment } from 'react';
 import 'daisyui/dist/full.css'; // Importuj DaisyUI stilove
+import { XMarkIcon } from "@heroicons/react/24/solid";
 
 const GiphySearch = ({ onGifSelect }) => {
     const [searchTerm, setSearchTerm] = useState("");
@@ -53,7 +54,13 @@ const GiphySearch = ({ onGifSelect }) => {
 
             <Transition appear show={isOpen} as={Fragment}>
                 <Dialog as="div" className="fixed inset-0 flex items-center justify-center z-50" onClose={() => setIsOpen(false)}>
-                    <DialogPanel className="max-w-lg w-full p-4 bg-white rounded shadow-lg">
+                    <DialogPanel className="max-w-lg w-full p-4 bg-white rounded shadow-lg relative">
+                    <button 
+                        className="absolute top-2 right-2 text-gray-500 hover:text-gray-700  z-50"
+                        onClick={() => setIsOpen(false)}
+                    >
+                    <XMarkIcon className="h-6 w-6" aria-hidden="true" />
+                    </button>
                         <DialogTitle as="h3" className="text-lg font-bold mb-2">Select a GIF</DialogTitle>
                         <div className="grid grid-cols-2 gap-4 max-h-60 overflow-auto">
                             {gifs.map((gif) => (
