@@ -17,6 +17,7 @@ class Message extends Model
         'sender_id',
         'receiver_id',
         'group_id',
+        'gif_url'
     ];
 
     public function sender()

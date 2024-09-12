@@ -1,7 +1,8 @@
 import React, { useEffect, useRef } from "react";
 //useeffect i useref
 
-const NewMessageInput=({value, onChange, onSend}) => {
+const NewMessageInput=({value, onChange, onSend, onGifSelect}) => { //dodato za gif
+    
     const input = useRef();
 
     const onInputKeyDown = (ev) => {
@@ -29,6 +30,12 @@ const NewMessageInput=({value, onChange, onSend}) => {
         adjustHeight();
     }, [value]);
 
+    // const handleGifSelect = (gifUrl) => {
+    //     // Kada izaberete GIF, pozovite funkciju za slanje GIF-a
+    //     // onGifSelect(gifUrl);
+    //     onSendClick();
+        
+    // };
 
 
     return(

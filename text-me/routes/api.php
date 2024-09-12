@@ -55,6 +55,21 @@ Route::get('/test', function () {
 });
 
 
+//////////////////////////////////////////////////////////////////
+use Illuminate\Support\Facades\Http;
+
+Route::get('/giphy-search', function (Request $request) {
+    $query = $request->query('q'); // Pretraga pojam iz zahteva
+    $apiKey = "dlMeoqlKVcKe1CIr9Z1kjCjkk87YIVIE"; 
+
+    $response = Http::get("https://api.giphy.com/v1/gifs/search", [
+        'api_key' => $apiKey,
+        'q' => $query,
+        'limit' => 10, // Broj gifova
+    ]);
+
+    return $response->json();
+});
 
 
 

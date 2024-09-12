@@ -1,6 +1,6 @@
 //import usestate
 //import heroicons
-import { useState, Fragment } from "react";
+import { useState, Fragment, useEffect } from "react";
 import NewMessageInput from "./NewMessageInput";
 import { FaceSmileIcon, HandThumbUpIcon, HeartIcon, PaperAirplaneIcon, PaperClipIcon, PhotoIcon, XCircleIcon } from "@heroicons/react/24/solid";
 import EmojiPicker from "emoji-picker-react";
@@ -10,7 +10,6 @@ import { isAudio, isImage} from "@/helpers";
 import AttachmentPreview from "./AttachmentPreview";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import AudioRecorder from "./AudioRecorder";
-import { usePage } from "@inertiajs/react";
 
 const MessageInput = ({conversation = null}) => {
     const [newMessage, setNewMessage] = useState("");
@@ -24,6 +23,19 @@ const MessageInput = ({conversation = null}) => {
 
     const [chosenFiles, setChosenFiles] = useState([]);
     const [uploadProgress, setUploadProgress] = useState(0);
+
+    const [chosenGif, setChosenGif] = useState(null);  // Drži odabrani GIF //dodato
+    
+    const isValidUrl = (url) => {
+        try {
+            new URL(url);
+            return true;
+        } catch {
+            return false;
+        }
+    };
+
+    
 
     const onFileChange = (ev) => {
         const files = ev.target.files;
@@ -48,7 +60,51 @@ const MessageInput = ({conversation = null}) => {
         if (messageSending) {
             return;
         }
-        if (newMessage.trim() === "" && chosenFiles.length === 0) {
+
+        console.log("Chosen GIF URL:", chosenGif);
+    
+        if (chosenGif) {
+            if (!isValidUrl(chosenGif.url)) {
+                setInputErrorMessage("Invalid GIF URL");
+                setTimeout(() => setInputErrorMessage(""), 3000);
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append("gif_url", chosenGif.url);
+
+    
+            if (conversation.is_user) {
+                formData.append("receiver_id", conversation.id);
+            } else if (conversation.is_group) {
+                formData.append("group_id", conversation.id);
+            }
+    
+            setMessageSending(true);
+    
+            axios
+                .post(route("message.store"), formData)
+                .then((response) => {
+                    setNewMessage("");
+                    setMessageSending(false);
+                    setUploadProgress(0);
+                    setChosenFiles([]);
+                    setChosenGif(null);
+                })
+                .catch((error) => {
+                    setMessageSending(false);
+                    setChosenFiles([]);
+                    const message = error?.response?.data?.message;
+                    setInputErrorMessage(message || "An error occurred while sending message");
+                });
+    
+            
+            return;  // Zaustavi dalji rad ako šaljemo samo GIF
+        }
+    
+       
+
+         if (newMessage.trim() === "" && chosenFiles.length === 0) { //dodat treci uslov
             setInputErrorMessage("Please enter a message or upload attachments");
 
             setTimeout(()=> {
@@ -61,6 +117,7 @@ const MessageInput = ({conversation = null}) => {
             formData.append("attachments[]", file.file);
         });
         formData.append("message", newMessage);
+
         if (conversation.is_user) {
             formData.append("receiver_id", conversation.id);
         }
@@ -85,6 +142,7 @@ const MessageInput = ({conversation = null}) => {
                 setMessageSending(false);
                 setUploadProgress(0);
                 setChosenFiles([]);
+                setChosenGif(null); //dodato
             })
             .catch((error) => {
                 setMessageSending(false);
@@ -121,6 +179,22 @@ const MessageInput = ({conversation = null}) => {
         setChosenFiles((prevFiles) => [...prevFiles,{file,url}]);
     };
 
+
+    const onGifSelect = (gif) => {
+        console.log("Selected GIF:", gif);  
+        setChosenGif(gif);
+        setNewMessage(""); 
+        // onSendClick();  // Automatski posalji poruku
+    };
+
+    useEffect(() => {
+        if (chosenGif) {
+          // Ako je GIF URL postavljen, automatski ga šaljemo
+          onSendClick();
+        }
+      }, [chosenGif]); // Praćenje promene GIF URL-a
+      
+    
      return(
         <div className="flex flex-wrap items-start border-t border-slate-700 py-3">
             <div className="order-2 flex-1 xs:flex-none xs:order-1 p-2">
@@ -164,6 +238,9 @@ const MessageInput = ({conversation = null}) => {
                             onSend={onSendClick}
                             onChange={(ev) => setNewMessage(ev.target.value)}
                         />
+
+
+
                         <button 
                                 onClick={onSendClick} 
                                 disabled={messageSending}
@@ -232,23 +309,17 @@ const MessageInput = ({conversation = null}) => {
             </div>
             
             <div className="order-3 xs:order-3 p-2 flex">
+                    <Popover className="relative">
+                        <PopoverButton className="p-1 text-gray-400 hover:text-gray-300">
+                            <FaceSmileIcon className="w-6 h-6" />
+                        </PopoverButton>
+                        <PopoverPanel className="absolute z-40 right-0 bottom-full">
+                            <EmojiPicker theme="light" onEmojiClick={(ev) => 
+                                setNewMessage(newMessage + ev.emoji)}>
 
-
-                     {canShowButton && (
-                         <Popover className="relative">
-                         <PopoverButton className="p-1 text-gray-400 hover:text-gray-300">
-                             {canShowButton && (
-                                     <FaceSmileIcon className="w-6 h-6" />
-                                 )}
-                         </PopoverButton>
-                         <PopoverPanel className="absolute z-40 right-0 bottom-full">
-                             <EmojiPicker theme="light" onEmojiClick={(ev) => 
-                                 setNewMessage(newMessage + ev.emoji)}>
- 
-                             </EmojiPicker>
-                         </PopoverPanel>
-                        </Popover>
-                    )}
+                            </EmojiPicker>
+                        </PopoverPanel>
+                    </Popover>
                   
                     <button onClick={onLikeClick} className="p-1 text-gray-400 hover:text-pink-500">
                         <HeartIcon className="w-6 h-6 pulse-animation" />

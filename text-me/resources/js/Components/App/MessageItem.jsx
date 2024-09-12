@@ -49,7 +49,11 @@ const MessageItem = ({ message, attachmentClick })=>{
                 )}
                 <div className="chat-message">
                     <div className="chat-message-content">
-                        <ReactMarkdown>{message.message}</ReactMarkdown>
+                    {message.gif_url ? ( // **Dodato za prikaz GIF-a**
+                            <img src={message.gif_url} alt="GIF" /> // **Prikaz GIF-a**
+                        ) : (
+                            <ReactMarkdown>{message.message}</ReactMarkdown>
+                        )}
                     </div>
                     <MessageAttachments
                         attachments={message.attachments}

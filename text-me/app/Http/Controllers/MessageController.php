@@ -174,7 +174,23 @@ class MessageController extends Controller
 
         $files = $data['attachments'] ?? [];
 
+            // Preuzimanje gif_url
+        $gifUrl = $request->input('gif_url');
+
+        // Dodavanje gif_url u $data ako postoji
+        if ($gifUrl) {
+            $data['gif_url'] = $gifUrl;
+        }
+
+
         $message = Message::create($data);
+
+        
+        if ($gifUrl) {
+            $message->gif_url = $gifUrl;
+            $message->save();
+        }
+    
 
         $attachments = [];
         if ($files) {
