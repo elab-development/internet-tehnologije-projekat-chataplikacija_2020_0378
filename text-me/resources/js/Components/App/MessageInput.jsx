@@ -10,6 +10,9 @@ import { isAudio, isImage} from "@/helpers";
 import AttachmentPreview from "./AttachmentPreview";
 import CustomAudioPlayer from "./CustomAudioPlayer";
 import AudioRecorder from "./AudioRecorder";
+import { usePage } from "@inertiajs/react";
+import GiphySearch from "./GiphySearch";
+
 
 const MessageInput = ({conversation = null}) => {
     const [newMessage, setNewMessage] = useState("");
@@ -320,6 +323,15 @@ const MessageInput = ({conversation = null}) => {
                             </EmojiPicker>
                         </PopoverPanel>
                     </Popover>
+                                       
+                <Popover className="relative">  
+                    <PopoverButton className="p-1 text-gray-400 hover:text-gray-300">
+                        GIF 
+                    </PopoverButton>
+                    <PopoverPanel className="absolute z-40 right-0 bottom-full">
+                        <GiphySearch onGifSelect={onGifSelect} />  
+                    </PopoverPanel>
+                </Popover> 
                   
                     <button onClick={onLikeClick} className="p-1 text-gray-400 hover:text-pink-500">
                         <HeartIcon className="w-6 h-6 pulse-animation" />
