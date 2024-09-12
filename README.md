@@ -31,3 +31,17 @@ Admin user ima sve funkcionalnosti premium usera i jos par dodatnih
 1.Mogucnost da menja uloge korisnika(Moze mu dati admin privilegije)
 
 2.Mogucnost da blokira korisnike(Blokirani korisnik ne moze koristiti aplikaciju dok ga neki od admina ne odblokira)
+
+
+
+Pokretanje aplikacije:
+
+cd text-me
+
+php artisan serve
+
+npm run dev 
+
+php artisan reverb:start --debug
+
+php artisan queue:listen
